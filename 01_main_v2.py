@@ -6,7 +6,7 @@ class Converter:
 
     def __init__(self):
 
-        # initilaise variables such as feedback
+        # initialise variables such as feedback
         self.var_feedback = StringVar()
         self.var_feedback.set("")
 
@@ -42,7 +42,6 @@ class Converter:
                                 text="",
                                 font=("Arial", "12", "bold"),
                                 fg="#9C0000")
-
 
         self.temp_error.grid(row=3)
 
@@ -88,40 +87,64 @@ class Converter:
 
     # Check input is more than -273 // future test make it -273C and 470F
     def check_input(self, min_temp):
+
+        has_error = "no"
         error = "Please enter a number that is more than {}".format(min_temp)
 
+        response = self.temp_entry.get()
+
         try:
-            response = self.temp_entry.get()
             response = float(response)
 
             if response < min_temp:
-                self.temp_error.config(text=error, fg="#FF0024")
-                self.temp_entry.config(bg="#ED4337")
-            else:
-                self.temp_error.config(text="You are OKAY!", fg="blue")
-                self.temp_entry.config(bg="#FFFFFF")
+                has_error = "yes"
 
         except ValueError:
-            self.temp_error.config(text=error)
-            self.temp_entry.config(bg="#ED4337")
+            has_error = "yes"
 
+        # if num invalid display error
+        if has_error == "yes":
+            self.var_has_error.set("yes")
+            self.var_has_error.set(error)
+            return "invalid"
+
+        else:
+            # set no to previous errors
+            self.var_has_error.set("no")
+            # enable history
+            self.temp_history_export.config(state=NORMAL)
+            return response
 
     def to_celsius(self):
         to_convert = self.check_input(-273)
 
-        if to_convert != "error":
-            # Calculations
-            self.var_feedback.set(f"Converting {to_convert} to *F")
-            return to_convert
+        if to_convert != "invalid":
+
+            self.var_feedback.set(f"Converting {to_convert} to C")
+
+        self.output_ans()
 
     def to_fahrenheit(self):
         to_convert = self.check_input(-459)
 
-        if to_convert != "error":
-            self.var_feedback.set(f"Converting {to_convert} to *C")
-            return to_convert
+        if to_convert != "invalid":
+            self.var_feedback.set(f"Converting {to_convert} to F")
 
+        self.output_ans()
 
+    def output_ans(self):
+        output = self.var_feedback.get()
+        has_error = self.var_has_error.get()
+
+        if has_error == "yes":
+            self.temp_error.config(fg="9C0000")
+            self.temp_entry.config(bg="F8CECC")
+
+        else:
+            self.temp_error.config(fg="#004C00")
+            self.temp_entry.config(bg="#ffffff")
+
+        self.temp_error.config(text=output)
 
 
 # Main routine
