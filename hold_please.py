@@ -1,19 +1,23 @@
+
+
+
 def to_celsius(self):
     to_convert = self.check_input(-273)
 
-    if to_convert != "error":
-        # Calculations
-        self.var_feedback.set(f"Converting {to_convert} to *F")
-        return to_convert
+    # gets input and converts it to the opposing temp and prints it
+    if to_convert != "invalid":
+        answer = (to_convert - 32) * 5 / 9
+        self.var_feedback.set(f"Your conversion is {answer :.0f} Degrees Celsius")
+
+    self.output_ans()
 
 
 def to_fahrenheit(self):
     to_convert = self.check_input(-459)
 
-    if to_convert != "error":
-        self.var_feedback.set(f"Converting {to_convert} to *C")
-        return to_convert
+    # gets input and converts it to the opposing temp and prints it
+    if to_convert != "invalid":
+        answer = (to_convert * 9 / 5) + 32
+        self.var_feedback.set(f"Your conversion is {answer :.0f}{degree_sign} Degrees Fahrenheit")
 
-
-command = self.to_fahrenheit
-command = self.to_celsius
+    self.output_ans()
